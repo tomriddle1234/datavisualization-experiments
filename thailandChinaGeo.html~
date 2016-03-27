@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <title>GeoTest</title> 
+        <script src="js/d3.min.js" charset="utf-8"></script> 
+        <script src="js/d3.geo.projection.min.js" charset="utf-8"></script>
+        <script src="js/topojson.min.js" charset="utf-8"></script>
+        
+        <link href="css/style.css" type="text/css" rel="stylesheet" \>
+        <style>
+            
+
+            .subunit.CHN { fill: #fb8072; }
+            .subunit.TWN { fill: #fb8072; }
+            .subunit.HKG { fill: #fb8072; }
+            .subunit.JPN { fill: #b3de69; }
+            .subunit.KOR { fill: #bc80bd; }
+            .subunit.IND { fill: #fdb462; }
+            .subunit.BTN { fill: #ffffb3; }
+            .subunit.NPL { fill: #80b1d3; }
+            .subunit.BGD { fill: #d9d9d9; }
+            .subunit.MMR { fill: #ccebc5; }
+            .subunit.THA { fill: #7489cf; }
+            .subunit.KHM { fill: #bebada; }
+            .subunit.VNM { fill: #df65b0; }
+            .subunit.LAO { fill: #fccde5; }
+            .subunit.PRK { fill: #989898; }
+
+
+        </style>
+    </head>
+    <body>
+        <script>
+       
+        var width = 1000,
+	    height = 590;
+
+        // draw svg
+        var svg = d3.select("body").append("svg")
+	        .attr("width", width)
+	        .attr("height", height);
+
+        // map projection
+        var projection = d3.geo.patterson()
+	        .center([60,54])
+            .scale(640)
+            .translate([0,0])
+            .precision(.5);
+
+        // path generator
+        var path = d3.geo.path()
+	        .projection(projection);
+
+        d3.json("json/asia.json", function(error, asia) {
+          
+          var subunits = topojson.feature(asia, asia.objects.subunits);
+	
+          svg.selectAll(".subunit")
+          	  .data(subunits.features)
+            .enter()
+              .append("path")
+              .attr("class", function(d) { return "subunit " + d.id; })
+              .attr("d", path);
+              
+              
+              
+         //var bankock = [13.736717,100.523186] ;
+         //var beijing = [39.913818,	116.363625] ;
+         var bankock = [13.736717,  100.523186] ;
+         var beijing = [39.913818,	116.363625] ;
+         console.log(projection(bankock), projection(beijing)) ;
+         
+         svg.selectAll("circle")
+            .data([bankock,beijing]).enter()
+            .append("circle")
+            .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+		    .attr("cy", function (d) { return projection(d)[1]; })
+		    .attr("r", "8px")
+		    .attr("fill", "red")
+        });
+        
+        </script>
+    </body>
+    
+</html>
