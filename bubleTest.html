@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"> 
+        <title>BubleTest</title> 
+        <script src="js/d3.min.js" charset="utf-8"></script> 
+        <link href="css/style.css" type="text/css" rel="stylesheet" \>
+    </head>
+    <body>
+        <script>
+        /*
+            d3.json("json/xingxie_all.json",function(data) {
+                var canvas = d3.select("body").append("svg")
+                .attr("width", 500) 
+                .attr("height", 500) ;
+                canvas.selectAll("rect")
+                    .data(data)
+                    .enter()
+                        .append("rect")
+                        .attr("width",function(d) {return d.阅读数/200})
+                        .attr("height", 4)
+                        .attr("y", function(d,i) {return i*5 })
+                        .attr("fill","blue") ;
+            } ) ;
+          */  
+          
+        var diameter = 960,
+        format = d3.format(",d");
+
+        var pack = d3.layout.pack()
+          .size([diameter - 4, diameter - 4])
+          .children(function(d) {
+            return d.values;
+          })
+          .value(function(d) {
+            return d.values;
+          })
+          .padding(10);
+
+        var svg = d3.select("body").append("svg")
+          .attr("width", diameter)
+          .attr("height", diameter)
+          .append("g")
+          .attr("transform", "translate(2,2)"); 
+          
+            //loading json files
+            d3.json("json/all.json",function(all_data) {
+            
+                //processing data
+                
+                var sortByBigCate = d3.nest()
+                    .key(function (d) {return d.涉及领域 ;})
+                    .key(function (d) {return d.具体分类 ;})
+                    .rollup(function (d) {return d.length ;})
+                    .entries(all_data) ;
+                
+                var bigCateRoot = {
+                    key:"" ,
+                    values: sortByBigCate 
+                } ;
+                
+                var node = svg.datum(bigCateRoot).selectAll(".node")
+                    .data(pack.nodes)
+                    .enter().append("g")
+                    .attr("class", function (d) {
+                        return d.children ? "node" : "leaf node";
+                    })
+                    .attr("transform", function(d) {
+                      return "translate(" + d.x + "," + d.y + ")";
+                    });
+                    
+                node.append("title")
+                    .text(function(d) {
+                      return d.name + (d.children ? "" : ": " + format(d.size));
+                    })
+                    .attr("z-index", "50")
+                    ;
+
+                node.append("circle")
+                    .attr("r", function(d) {
+                      return d.r;
+                    })
+                    .attr("z-index", "50")
+                    ;
+                    
+                node.append("text")
+                    .attr("dy",function (d) {return d.children ? d.r - 5 : ".3em" ; })
+                    .attr("font-size",function (d) {return d.children ? "1em" : ".6em" ; })
+                    .attr("z-index",function (d) {return d.children ? "1000" : "100" ; })
+                    .style("text-anchor", function (d) {return d.children ? "middle" : "middle" ; })
+                    .text(function(d) { return d.key.substring(0, d.r / 3); });
+                
+               
+            }) ;
+       
+        
+        </script>
+    </body>
+    
+</html>
