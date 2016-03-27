@@ -35,8 +35,8 @@
           .value(function(d) {
             return d.values;
           })
-          .padding(10);
-
+          .padding(3);
+ 
         var svg = d3.select("body").append("svg")
           .attr("width", diameter)
           .attr("height", diameter)
@@ -51,6 +51,7 @@
                 var sortByBigCate = d3.nest()
                     .key(function (d) {return d.涉及领域 ;})
                     .key(function (d) {return d.具体分类 ;})
+                    .key(function (d) {return d.报纸 ;})
                     .rollup(function (d) {return d.length ;})
                     .entries(all_data) ;
                 
@@ -69,6 +70,7 @@
                       return "translate(" + d.x + "," + d.y + ")";
                     });
                     
+                                      
                 node.append("title")
                     .text(function(d) {
                       return d.name + (d.children ? "" : ": " + format(d.size));
@@ -84,11 +86,13 @@
                     ;
                     
                 node.append("text")
-                    .attr("dy",function (d) {return d.children ? d.r - 5 : ".3em" ; })
-                    .attr("font-size",function (d) {return d.children ? "1em" : ".6em" ; })
+                    .attr("dy",function (d) {return d.children ? -d.r - 5 : ".3em" ; })
+                    .attr("font-size",function (d) {return d.children ? "0.5em" : ".3em" ; })
                     .attr("z-index",function (d) {return d.children ? "1000" : "100" ; })
                     .style("text-anchor", function (d) {return d.children ? "middle" : "middle" ; })
-                    .text(function(d) { return d.key.substring(0, d.r / 3); });
+                    .text(function(d) { return d.key.substring(0, d.r / 2); });
+                    
+                
                 
                
             }) ;
