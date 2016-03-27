@@ -35,13 +35,25 @@
           .value(function(d) {
             return d.values;
           })
-          .padding(3);
+          .padding(1);
  
         var svg = d3.select("body").append("svg")
           .attr("width", diameter)
           .attr("height", diameter)
           .append("g")
           .attr("transform", "translate(2,2)"); 
+          
+        var tooltip = d3.select("body")
+            .append("div")
+            .style("position", "absolute")
+            .style("z-index", "10")
+            .style("visibility", "hidden")
+            .style("color", "white")
+            .style("padding", "8px")
+            .style("background-color", "rgba(0, 0, 0, 0.75)")
+            .style("border-radius", "6px")
+            .style("font", "12px sans-serif")
+            .text("tooltip");
           
             //loading json files
             d3.json("json/all.json",function(all_data) {
@@ -83,14 +95,46 @@
                       return d.r;
                     })
                     .attr("z-index", "50")
+                    .attr("class", function(d) {
+                        //check if leaf node
+                        if (typeof d.children == "undefined"){
+                            if (d.key == "世界日报")
+                                return "shijie" ;
+                            else
+                                return "xingxie" ;
+                        }
+                    })
+                    .on("mouseover", function(d) {
+                     var tipFirstText ;
+                     if (typeof d.parent != "undefined"){
+                        tipFirstText = d.parent.key ;
+                     }
+                     else{
+                        tipFirstText = "" ;
+                     }
+                     
+                     tooltip.text(tipFirstText + " " + d.key + " 文章数量" + ": " + format(d.value));
+                     tooltip.style("visibility", "visible");
+                      })
+                    .on("mousemove", function() {
+                      return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");
+                     })
+                    .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
                     ;
-                    
+                
+                
                 node.append("text")
-                    .attr("dy",function (d) {return d.children ? -d.r - 5 : ".3em" ; })
-                    .attr("font-size",function (d) {return d.children ? "0.5em" : ".3em" ; })
+                    .attr("dy",function (d) {return d.children ? d.r : ".3em" ; })
+                    .attr("font-size",function (d) {return d.children ? "1em" : ".3em" ; })
                     .attr("z-index",function (d) {return d.children ? "1000" : "100" ; })
                     .style("text-anchor", function (d) {return d.children ? "middle" : "middle" ; })
-                    .text(function(d) { return d.key.substring(0, d.r / 2); });
+                    .text (function(d) {
+                        if (d.depth == 1){
+                                return d.key.substring(0, d.r/2) ;
+                        }
+                    })
+                    
+                    ;
                     
                 
                 
