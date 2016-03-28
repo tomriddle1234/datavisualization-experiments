@@ -34,40 +34,33 @@
         <script>
        
         var width = 1000,
-	    height = 590;
+	    height = 1000;
+	    
+	    var projection = d3.geo.mercator() ;
+	        //.scale(500)
+	        //.translate([width/2, height/2]) ;
+	    
+	    var path = d3.geo.path()
+	        .projection(projection) ;
 
         // draw svg
         var svg = d3.select("body").append("svg")
 	        .attr("width", width)
 	        .attr("height", height);
 
-        // map projection
-        var projection = d3.geo.patterson()
-	        .center([60,54])
-            .scale(640)
-            .translate([0,0])
-            .precision(.5);
 
-        // path generator
-        var path = d3.geo.path()
-	        .projection(projection);
-
-        d3.json("json/asia.json", function(error, asia) {
+        d3.json("json/thailand_china_prep_map.json", function(error, mapdata) {
           
-          var subunits = topojson.feature(asia, asia.objects.subunits);
-	
-          svg.selectAll(".subunit")
-          	  .data(subunits.features)
-            .enter()
-              .append("path")
-              .attr("class", function(d) { return "subunit " + d.id; })
-              .attr("d", path);
+            if (error) return console.error(error) ;
+            svg.append("path")
+                .datum(topojson.feature(mapdata, mapdata.objects.china_thailand_subunits))
+                .attr("d", path) ;
               
-              
+        }) ;
               
          //var bankock = [13.736717,100.523186] ;
          //var beijing = [39.913818,	116.363625] ;
-         var bankock = [100,  100] ;
+         /*var bankock = [100,  100] ;
          var beijing = [55,	55] ;
          console.log(projection(bankock), projection(beijing)) ;
          
@@ -79,7 +72,7 @@
 		    .attr("r", "8px")
 		    .attr("fill", "red")
         });
-        
+        */
         </script>
     </body>
     
