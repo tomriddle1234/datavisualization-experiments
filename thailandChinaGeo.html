@@ -7,27 +7,14 @@
         <script src="js/d3.geo.projection.min.js" charset="utf-8"></script>
         <script src="js/topojson.min.js" charset="utf-8"></script>
         
-        <link href="css/style.css" type="text/css" rel="stylesheet" \>
+<!--        <link href="css/style.css" type="text/css" rel="stylesheet" \>-->
         <style>
-            
-
+            .subunit.CHH { fill: #fb8072; }
+            .subunit.CHI { fill: #fb8072; }
             .subunit.CHN { fill: #fb8072; }
             .subunit.TWN { fill: #fb8072; }
             .subunit.HKG { fill: #fb8072; }
-            .subunit.JPN { fill: #b3de69; }
-            .subunit.KOR { fill: #bc80bd; }
-            .subunit.IND { fill: #fdb462; }
-            .subunit.BTN { fill: #ffffb3; }
-            .subunit.NPL { fill: #80b1d3; }
-            .subunit.BGD { fill: #d9d9d9; }
-            .subunit.MMR { fill: #ccebc5; }
             .subunit.THA { fill: #7489cf; }
-            .subunit.KHM { fill: #bebada; }
-            .subunit.VNM { fill: #df65b0; }
-            .subunit.LAO { fill: #fccde5; }
-            .subunit.PRK { fill: #989898; }
-
-
         </style>
     </head>
     <body>
@@ -36,9 +23,18 @@
         var width = 1000,
 	    height = 1000;
 	    
-	    var projection = d3.geo.mercator() ;
-	        //.scale(500)
-	        //.translate([width/2, height/2]) ;
+	    
+	    //albers is not working
+	    var projection = d3.geo.mercator()
+	        .center([107, 31])
+            .scale(850)
+            .translate([width/2, height/2]);
+	       
+//	    var projection = d3.geo.albers()
+//	        .center([115, 39]) // 115W 39N is about beijing
+//	        .rotate([0,0, 10])
+//	        .parallels([14, 52])
+//	        ;
 	    
 	    var path = d3.geo.path()
 	        .projection(projection) ;
@@ -49,12 +45,16 @@
 	        .attr("height", height);
 
 
-        d3.json("json/thailand_china_prep_map.json", function(error, mapdata) {
+        d3.json("json/thailand_china_prep_map_with_places.json", function(error, mapdata) {
           
             if (error) return console.error(error) ;
-            svg.append("path")
-                .datum(topojson.feature(mapdata, mapdata.objects.china_thailand_subunits))
-                .attr("d", path) ;
+            svg.selectAll(".subunit")
+                .data(topojson.feature(mapdata, mapdata.objects.china_thailand_subunits).features)
+                .enter().append("path")
+                .attr("class", function(d) { console.log(d.id) ; return "subunit " + d.id ;})
+                .attr("d", path) 
+                
+                ;
               
         }) ;
               
