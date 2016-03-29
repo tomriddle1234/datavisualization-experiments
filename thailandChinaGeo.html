@@ -53,8 +53,26 @@
                 .enter().append("path")
                 .attr("class", function(d) { console.log(d.id) ; return "subunit " + d.id ;})
                 .attr("d", path) 
-                
                 ;
+            svg.append("path")
+                .datum(topojson.feature(mapdata,mapdata.objects.cn_places))
+                .attr("d",path)
+                .attr("class","place") ;
+            
+            svg.append("path")
+                .datum(topojson.feature(mapdata,mapdata.objects.th_places))
+                .attr("d",path)
+                .attr("class","place") ;
+            svg.append("path")
+                .datum(topojson.feature(mapdata,mapdata.objects.tw_places))
+                .attr("d",path)
+                .attr("class","place") ;
+            svg.append("path")
+                .datum(topojson.feature(mapdata,mapdata.objects.hk_places))
+                .attr("d",path)
+                .attr("class","place") ;
+                  
+                
               
         }) ;
               
