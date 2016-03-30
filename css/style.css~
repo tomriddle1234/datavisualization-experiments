@@ -28,7 +28,7 @@ circle {
     font-size: 0.4em ;
 }
 .route {
-      fill: #036;
+  fill: none;
   stroke: #6cb0e0;
   stroke-width: 0.5px;
   stroke-linecap: round;
