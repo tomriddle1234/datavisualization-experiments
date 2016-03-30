@@ -16,3 +16,22 @@ circle {
 .shijie {
     fill: #70ccbd ;
 }
+
+.place {
+    fill: #558888 ;
+    opacity: 0.6;
+    
+}
+.place-label {
+    fill: #222222 ;
+    opacity: 0.2 ;
+    font-size: 0.4em ;
+}
+.route {
+  fill: #036;
+  stroke: #6cb0e0;
+  stroke-width: 0.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
