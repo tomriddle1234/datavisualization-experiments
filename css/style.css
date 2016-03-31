@@ -1,3 +1,7 @@
+body {
+    font-family: sans-serif ;
+}
+
 circle {
   fill: rgb(31, 119, 180);
   fill-opacity: .25;
@@ -19,7 +23,7 @@ circle {
 
 .place {
     fill: #558888 ;
-    opacity: 0.1;
+    opacity: 0.3;
     stroke-width: 1px;
     
 }
@@ -28,6 +32,13 @@ circle {
     opacity: 0.1 ;
     font-size: 0.4em ;
 }
+
+.scaled_labels {
+    fill: #558888 ;
+    opacity: 1.0 ;
+    font-size: 1em ;
+}
+
 .route {
   fill: none;
   stroke: #6cb0e0;
